@@ -26,6 +26,15 @@ func TestNextToken(t *testing.T) {
 	};
 	
 	let result = add(five, ten);
+	!-/*5;
+	### this code below add code to the tests add create tokens left off at 21:40 09/07/2021 to go padel - will update on return
+	5 < 10 > 5;
+
+	if (5 < 10) {
+		return true;
+	} else {
+	 	return false;
+	}
 	`
 
 	tests := []struct { // The expected token type and literal values are stored in a slice of structs
@@ -67,6 +76,12 @@ func TestNextToken(t *testing.T) {
 		{token.COMMA, ","},
 		{token.IDENT, "ten"},
 		{token.RPAREN, ")"},
+		{token.SEMICOLON, ";"},
+		{token.BANG, "!"},
+		{token.MINUS, "-"},
+		{token.SLASH, "/"},
+		{token.ASTERISK, "*"},
+		{token.INT, "5"},
 		{token.SEMICOLON, ";"},
 		{token.EOF, ""}, // The last test case expects the lexer to return a token with the type EOF and an empty literal.
 	}
