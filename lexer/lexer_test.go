@@ -16,27 +16,62 @@ import (
 
 // TestNextToken tests the NextToken method of the lexer
 // Test Cases: includes different token types and literals such as ASSIGN, PLUS, {}, etc.
+// Assertion Checks: The test asserts that the tokens returned by NextToken match the expected types and literals.
 func TestNextToken(t *testing.T) {
-	input := `=+(){},;` // A new lexer instance is created with the input string =+(){},;
+	input := `let five = 5;
+	let ten = 10;
+	
+	let add = fn(x, y) {
+		x + y;
+	};
+	
+	let result = add(five, ten);
+	`
 
-	// The expected token type and literal values are stored in a slice of structs
-	// Assertion Checks: The test asserts that the tokens returned by NextToken match the expected types and literals.
-	tests := []struct {
-		expectedType      token.TokenType
-		epectectedLiteral string
+	tests := []struct { // The expected token type and literal values are stored in a slice of structs
+		expectedType    token.TokenType
+		expectedLiteral string
 	}{
+		{token.LET, "let"}, // The first test case expects the lexer to return a token with the type LET and the literal "let".
+		{token.IDENT, "five"},
 		{token.ASSIGN, "="},
-		{token.PLUS, "+"},
+		{token.INT, "5"},
+		{token.SEMICOLON, ";"},
+		{token.LET, "let"},
+		{token.IDENT, "ten"},
+		{token.ASSIGN, "="},
+		{token.INT, "10"},
+		{token.SEMICOLON, ";"},
+		{token.LET, "let"},
+		{token.IDENT, "add"},
+		{token.ASSIGN, "="},
+		{token.FUNCTION, "fn"},
 		{token.LPAREN, "("},
+		{token.IDENT, "x"},
+		{token.COMMA, ","},
+		{token.IDENT, "y"},
 		{token.RPAREN, ")"},
 		{token.LBRACE, "{"},
-		{token.RBRACE, "}"},
-		{token.COMMA, ","},
+		{token.IDENT, "x"},
+		{token.PLUS, "+"},
+		{token.IDENT, "y"},
 		{token.SEMICOLON, ";"},
-		{token.EOF, ""},
+		{token.RBRACE, "}"},
+		{token.SEMICOLON, ";"},
+		{token.LET, "let"},
+		{token.IDENT, "result"},
+		{token.ASSIGN, "="},
+		{token.IDENT, "add"},
+		{token.LPAREN, "("},
+		{token.IDENT, "five"},
+		{token.COMMA, ","},
+		{token.IDENT, "ten"},
+		{token.RPAREN, ")"},
+		{token.SEMICOLON, ";"},
+		{token.EOF, ""}, // The last test case expects the lexer to return a token with the type EOF and an empty literal.
 	}
 
-	l := New(input)
+	l := New(input) // A new lexer instance is created with the input string =+(){},;
 
 	for i, tt := range tests {
 		tok := l.NextToken()
@@ -52,7 +87,7 @@ func TestNextToken(t *testing.T) {
 		//For example, if the input is a + character, the expectedLiteral for the PLUS token type would be "+".
 
 		if tok.Literal != tt.expectedLiteral {
-			t.Fatal("tests[%d] - literal wrong. expected=%q, got=%q",
+			t.Fatalf("tests[%d] - literal wrong. expected=%q, got=%q",
 				i, tt.expectedLiteral, tok.Literal)
 		}
 	}
